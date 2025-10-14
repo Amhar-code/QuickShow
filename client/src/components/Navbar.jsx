@@ -41,7 +41,7 @@ const Navbar = () => {
           <button
             className="px-4 py-1 sm:py-2 sm:px-7 bg-primary hover:bg-primary-dull 
             transition rounded-full font-medium cursor-pointer"
-            onClick={() => openSignIn()} // Added onClick to trigger sign-in form
+            onClick={() => openSignIn()}
           >
             Login
           </button>
