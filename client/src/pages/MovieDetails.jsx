@@ -16,7 +16,7 @@ const MovieDetails = () => {
 
   const getShow = async () => {
     const foundShow = dummyShowsData.find(show => show._id === id)
-    if (show) {
+    if (foundShow) {
       setShow({
         movie: foundShow,
         dateTime: dummyDateTimeData
