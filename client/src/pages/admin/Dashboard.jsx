@@ -69,7 +69,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <p className='mt-10 text-lg font-medium'>Active Shows</p>
+            <p className='mt-11 text-lg font-medium'>Active Shows</p>
             <div className='relative flex flex-wrap gap-6 mt-4 max-w-5xl'>
                 <BlurCircle top='100px' left='-10%' />
                 {dashboardData.activeShows.map((show) => (
@@ -95,7 +95,8 @@ const Dashboard = () => {
                 ))}
             </div>
         </>
-    ) : <Loading />
+    ) :
+        <Loading />
 }
 
 export default Dashboard
