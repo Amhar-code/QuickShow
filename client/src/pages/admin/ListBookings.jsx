@@ -34,7 +34,7 @@ const ListBookings = () => {
                             <th className='p-2 font-medium'>Amount</th>
                         </tr>
                     </thead>
-                    <tbody className='text-sm font-light'>
+                    <tbody className='text-sm font-light '>
                         {bookings.map((item, index) => (
                             <tr key={index} className='border-b border-primary/20
                     bg-primary/5 even:bg-primary/10'>
