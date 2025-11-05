@@ -293,7 +293,7 @@ export const dummyDashboardData = {
 export const dummyBookingData = [
     {
         "_id": "68396334fb83252d82e17295",
-        "user": { "name": "GreatStack", },
+        "user": { "name": "Gamma", },
         "show": {
             _id: "68352363e96d99513e4221a4",
             movie: dummyShowsData[0],
@@ -306,7 +306,7 @@ export const dummyBookingData = [
     },
     {
         "_id": "68396334fb83252d82e17295",
-        "user": { "name": "GreatStack", },
+        "user": { "name": "Parker", },
         "show": {
             _id: "68352363e96d99513e4221a4",
             movie: dummyShowsData[0],
@@ -319,7 +319,7 @@ export const dummyBookingData = [
     },
     {
         "_id": "68396334fb83252d82e17295",
-        "user": { "name": "GreatStack", },
+        "user": { "name": "Oscar", },
         "show": {
             _id: "68352363e96d99513e4221a4",
             movie: dummyShowsData[0],
@@ -327,7 +327,7 @@ export const dummyBookingData = [
             showPrice: 59,
         },
         "amount": 147,
-        "bookedSeats": ["A1", "A2","A3"],
+        "bookedSeats": ["A1", "A2", "A3"],
         "isPaid": true,
     },
 ]
