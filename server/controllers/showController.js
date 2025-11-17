@@ -39,8 +39,8 @@ export const addShow = async (req, res) => {
             const movieDetails = {
                 _id: movieId,
                 title: movieApitData.title,
-                overview: movieApitData.overview,
-                poster_path: movieApitData.poster_path,
+                Overview: movieApitData.overview,
+                Poster_path: movieApitData.poster_path,
                 backdrop_path: movieApitData.backdrop_path,
                 genres: movieApitData.genres,
                 casts: movieCreditsData.cast,
@@ -50,6 +50,7 @@ export const addShow = async (req, res) => {
                 vote_average: movieApitData.vote_average,
                 runtime: movieApitData.runtime,
             }
+
 
             //Add moovie to database
             movie = await Movie.create(movieDetails);
