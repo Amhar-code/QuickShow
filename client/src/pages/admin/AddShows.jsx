@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { dummyShowsData } from '../../assets/assets';
+import React, { use, useEffect, useState } from 'react'
 import Loading from '../../components/Loading';
 import Title from '../../components/admin/Title';
 import { StarIcon, CheckIcon, Trash2 } from 'lucide-react';
 import { KConverter } from '../../lib/KConverter';
+import { useAppContext } from '../../context/AppContext';
 
 export const AddShows = () => {
+    const { axios, getToken, user, image_base_url } = useAppContext();
     const currency = import.meta.env.VITE_CURRENCY;
 
     const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
@@ -15,7 +16,17 @@ export const AddShows = () => {
     const [showPrice, setShowPrice] = useState("");
 
     const fetchNowPlayingMovies = async () => {
-        setNowPlayingMovies(dummyShowsData);
+        try {
+            const { data } = await axios.get('/api/show/now-playing', {
+                headers:
+                    { Authorization: `Bearer ${await getToken()}` }
+            });
+            if (data.success) {
+                setNowPlayingMovies(data.movies);
+            }
+        } catch (error) {
+            console.log('Error fetching movies:', error);
+        }
     };
 
     const handleDateTimeAdd = () => {
@@ -49,8 +60,10 @@ export const AddShows = () => {
     };
 
     useEffect(() => {
-        fetchNowPlayingMovies();
-    }, []);
+        if (user) {
+            fetchNowPlayingMovies();
+        }
+    }, [user]);
 
     return nowPlayingMovies.length > 0 ? (
         <>
@@ -67,7 +80,7 @@ export const AddShows = () => {
                             >
                                 <div className='relative rounded-lg overflow-hidden'>
                                     <img
-                                        src={movie.poster_path}
+                                        src={image_base_url + movie.poster_path}
                                         alt={movie.title || 'movie poster'}
                                         className='w-full object-cover brightness-90'
                                     />
