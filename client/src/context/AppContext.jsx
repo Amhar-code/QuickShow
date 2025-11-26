@@ -51,7 +51,7 @@ export const AppProvider = ({ children }) => {
 
     const fetchFavoriteMovies = async () => {
         try {
-            const { data } = await axios.get('/api/user/favorites', {
+            const { data } = await axios.get('/api/user/favorite', {
                 headers:
                     { Authorization: `Bearer ${await getToken()}` }
             });

@@ -9,7 +9,7 @@ const MovieCard = ({ movie }) => {
   const { image_base_url } = useAppContext();
 
   const handleNavigate = () => {
-    navigate(`/movies/${movie.id}`);
+    navigate(`/movies/${movie._id}`);
     window.scrollTo(0, 0);
   };
 
