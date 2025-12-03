@@ -54,7 +54,7 @@ export const createBooking = async (req, res) => {
         const line_items = [{
             price_data: {
                 currency: 'usd',
-                product_name: {
+                product_data: {
                     name: showData.movie.title
                 },
                 unit_amount: Math.floor(booking.amount) * 100
@@ -66,7 +66,7 @@ export const createBooking = async (req, res) => {
             success_url: `${origin}/loading/my-bookings`,
             cancel_url: `${origin}/my-bookings`,
             line_items: line_items,
-            mode: 'payments',
+            mode: 'payment',
             metadata: {
                 bookingId: booking._id.toString()
             },
