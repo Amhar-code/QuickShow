@@ -8,7 +8,9 @@ const Loading = () => {
   useEffect(() => {
     if (nextUrl) {
       setTimeout(() => {
-        navigate('' + nextUrl);
+        // Ensure we navigate to an absolute path (e.g. "/my-bookings")
+        const target = nextUrl.startsWith('/') ? nextUrl : `/${nextUrl}`;
+        navigate(target);
       }, 8000)
     }
   }, [])

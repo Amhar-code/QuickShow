@@ -16,6 +16,7 @@ import Layout from './pages/admin/Layout.jsx'
 import { AddShows } from './pages/admin/AddShows.jsx'
 import { useAppContext } from './context/AppContext.jsx'
 import { SignIn } from '@clerk/clerk-react'
+import Loading from './components/Loading.jsx'
 
 const App = () => {
 
@@ -32,6 +33,7 @@ const App = () => {
         <Route path='/movies/:id' element={<MovieDetails />} />
         <Route path='/movies/:id/:date' element={<SeatLayout />} />
         <Route path='/my-bookings' element={<MyBookings />} />
+        <Route path='/loading/:nextUrl' element={<Loading />} />
         <Route path='/favourite' element={<Favourite />} />
         <Route path='/admin/*' element={user ? <Layout /> : (
           <div className='min-h-screen flex justify-center items-center'>
