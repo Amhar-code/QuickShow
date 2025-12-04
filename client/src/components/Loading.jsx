@@ -1,11 +1,25 @@
 import React, { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useAppContext } from '../context/AppContext'
 
 const Loading = () => {
   const { nextUrl } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { axios } = useAppContext();
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const sessionId = searchParams.get('session_id');
+
+    // If we have a Stripe session id, confirm the payment on the backend
+    if (sessionId) {
+      axios.get(`/api/booking/confirm-payment?session_id=${sessionId}`)
+        .catch((error) => {
+          console.log('Error confirming payment:', error);
+        });
+    }
+
     if (nextUrl) {
       setTimeout(() => {
         // Ensure we navigate to an absolute path (e.g. "/my-bookings")

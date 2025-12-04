@@ -63,7 +63,7 @@ export const createBooking = async (req, res) => {
         }];
 
         const session = await stripeInstance.checkout.sessions.create({
-            success_url: `${origin}/loading/my-bookings`,
+            success_url: `${origin}/loading/my-bookings?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/my-bookings`,
             line_items: line_items,
             mode: 'payment',
@@ -89,6 +89,37 @@ export const getOccupiedSeats = async (req, res) => {
 
         const occupiedSeats = Object.keys(showData.occupiedSeats);
         res.json({ success: true, occupiedSeats });
+    } catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message });
+    }
+}
+
+export const confirmBookingPayment = async (req, res) => {
+    try {
+        const { session_id } = req.query;
+        if (!session_id) {
+            return res.status(400).json({ success: false, message: "Session ID is required" });
+        }
+
+        const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
+        const session = await stripeInstance.checkout.sessions.retrieve(session_id);
+
+        if (session.payment_status !== 'paid') {
+            return res.json({ success: false, message: "Payment not completed" });
+        }
+
+        const { bookingId } = session.metadata || {};
+        if (!bookingId) {
+            return res.json({ success: false, message: "Booking ID missing in session metadata" });
+        }
+
+        await Booking.findByIdAndUpdate(bookingId, {
+            isPaid: true,
+            paymentLink: ""
+        });
+
+        res.json({ success: true, message: "Booking payment confirmed" });
     } catch (error) {
         console.log(error.message);
         res.json({ success: false, message: error.message });
