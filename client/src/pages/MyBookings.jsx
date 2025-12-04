@@ -4,6 +4,8 @@ import BlurCircle from '../components/BlurCircle';
 import timeFormat from '../lib/timeFormat';
 import { dateFormat } from '../lib/dateFormat';
 import { useAppContext } from '../context/AppContext';
+import { Link } from 'react-router-dom';
+import { assets } from '../assets/assets';
 
 const MyBookings = () => {
   const currency = import.meta.env.VITE_CURRENCY;
@@ -12,13 +14,30 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [isloading, setIsLoading] = useState(true);
 
+  const normalizeMovie = (movie = {}) => ({
+    ...movie,
+    overview: movie.Overview ?? movie.overview ?? "",
+    poster_path: movie.poster_path ?? movie.Poster_path ?? "",
+    genres: movie.geners ?? movie.genres ?? [],
+  });
+
   const getMyBookings = async () => {
     try {
       const { data } = await axios.get('/api/user/bookings', {
         headers: { Authorization: `Bearer ${await getToken()}` }
       });
       if (data.success) {
-        setBookings(data.bookings);
+        const normalizedBookings = data.bookings.map((booking) => {
+          if (!booking?.show?.movie) return booking;
+          return {
+            ...booking,
+            show: {
+              ...booking.show,
+              movie: normalizeMovie(booking.show.movie)
+            }
+          }
+        });
+        setBookings(normalizedBookings);
       }
     } catch (error) {
       console.log(error);
@@ -40,12 +59,16 @@ const MyBookings = () => {
         <BlurCircle bottom='0px' left='600px' />
       </div>
       <h1 className='text-lg font-semibold mb-4'>My Bookings</h1>
-      {bookings.map((item, index) => (
-        <div key={index} className='flex flex-col md:flex-row justify-between
+      {bookings.map((item) => {
+        const posterPath = item.show?.movie?.poster_path;
+        const posterSrc = posterPath ? `${image_base_url}${posterPath}` : assets.profile;
+        return (
+        <div key={item._id} className='flex flex-col md:flex-row justify-between
         bg-primary/8 border border-primary/20 rounded-lg mt-4 p-2 max-w-3xl'>
           <div className='flex flex-col md:flex-row gap-4'>
             <img
-              src={`${image_base_url}/${item.show.movie.poster_path}`}
+              src={posterSrc}
+              onError={(e) => { e.currentTarget.src = assets.profile }}
               alt={item.show.movie.title}
               className='md:max-w-45 w-full md:w-auto aspect-video h-auto object-cover object-center rounded'
             />
@@ -59,8 +82,14 @@ const MyBookings = () => {
           justify-between p-4'>
             <div className='flex items-center gap-4'>
               <p className='text-2xl font-semibold mb-3'>{currency}{item.amount}</p>
-              {!item.isPaid && <button className='bg-primary px-4 py-1.5 mb-3
-              text-sm rounded-full font-medium cursor-pointer'>Pay Now</button>}
+              {item.isPaid ? (
+                <span className='text-green-500 text-sm font-semibold mb-3'>Paid</span>
+              ) : (
+                item.paymentLink && (
+                  <Link to={item.paymentLink} className='bg-primary px-4 py-1.5 mb-3
+              text-sm rounded-full font-medium cursor-pointer'>Pay Now</Link>
+                )
+              )}
             </div>
             <div className='text-sm'>
               <p><span className='text-gray-400'>Total Tickets: </span>
@@ -70,7 +99,7 @@ const MyBookings = () => {
             </div>
           </div>
         </div>
-      ))}
+      )})}
     </div>
   ) : <Loading />
 }
