@@ -177,6 +177,33 @@ const sendShowReminders = inngest.createFunction(
     }
 )
 
+//Inngest function to send new Show notification
+const sendNewShowNotifications = inngest.createFunction(
+    { id: 'send-new-show-notifications' },
+    { event: 'app/show.added' },
+
+    async ({ event }) => {
+        const { movieTitle, movieId } = event.data;
+        const users = await User.find({});
+
+        for (const user of users) {
+            const userEmail = user.email;
+            const userName = user.name;
+            const subject = `New Show added: "${movieTitle}"`;
+            const body = `<h1>Hi ${userName},</h1>
+                          <p>We're excited to announce a new show for the movie "<strong>${movieTitle}</strong>".</p>
+                          <p>Check it out and book your tickets now!</p>
+                          <a href="https://quickshow.vercel.app/movies/${movieId}">View Show Details</a>`;
+            await sendEmail({
+                to: userEmail,
+                subject,
+                body,
+            })
+        }
+        return { message: "Notification sent." }
+    }
+)
+
 
 // Create an empty array where we'll export future Inngest functions
 export const functions = [
@@ -185,5 +212,6 @@ export const functions = [
     syncUserUpdation,
     releaseSeatsAndDeleteBooking,
     sendBookingConfirmationEmail,
-    sendShowReminders
+    sendShowReminders,
+    sendNewShowNotifications
 ];
