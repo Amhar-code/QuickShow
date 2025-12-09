@@ -11,7 +11,8 @@ const HeroSection = () => {
     <div className='flex flex-col items-start justify-center
     gap-4 md:px-16 lg:px-36 bg-[url("./assets/backgroundImage.png")]
     bg-cover bg-center h-screen'>
-
+        
+        {/*logo*/}
         <img src={assets.marvelLogo} alt='marvel' className='max-h-11
         lg:h-11 mt-20' />
 
